@@ -1,0 +1,64 @@
+
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: e-commerce-junior-mongodb
+    volumes:
+      - ./e-commerce-junior-mongodb/data:/data/db
+    ports:
+      - "27018:27017"
+    networks:
+      - app-network
+  db:
+    image: mysql:latest
+    container_name: e-commerce-junior-db
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_USER: harlin
+      MYSQL_PASSWORD: 1234
+      MYSQL_DATABASE: majesticdb
+    volumes:
+      - ./e-commerce-junior-db/mysqldata:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./e-commerce-junior-backend
+      dockerfile: Dockerfile
+    container_name: e-commerce-junior-backend
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=harlin
+      - DB_PASSWORD=1234
+      - DB_NAME=majesticdb
+      - MONGODB_URI=mongodb://mongodb:27017
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./e-commerce-junior-front
+      dockerfile: Dockerfile
+      args:
+        API_URL: http://localhost:3000
+        OPENAI_API_KEY: OPENAI_API_KEY
+    container_name: e-commerce-junior-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

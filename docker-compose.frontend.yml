@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  frontend-aws:
+    build:
+      context: ./e-commerce-junior-front
+      dockerfile: Dockerfile
+      args:
+        API_URL: http://backend-loadbalancer-317152922.us-east-1.elb.amazonaws.com
+        OPENAI_API_KEY: OPENAI_API_KEY      
+    container_name: frontend-aws
+    ports:
+      - "4200:80"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
