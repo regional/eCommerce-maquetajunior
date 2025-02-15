@@ -33,3 +33,162 @@ Codigo html5 y css
 ![Captura de pantalla 2025-01-31 085857](https://github.com/user-attachments/assets/131b2fb5-9da8-4263-a4f9-f228a703ba8c)
 
 
+ 
+http://localhost:4200/login
+ 
+Validador de Usuario 
+<div class="login-container">
+    <div class="card card-container">
+        <div class="col-md-12">
+            <h3 class="text-center">Ecommerce Biu Inicia Sesión para comenzar a comprar</h3>
+            <img id="profile-img" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" class="profile-img-card" />
+            <form name="form" (ngSubmit)="onSubmit(f)" #f="ngForm" novalidate>
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input type="text" class="form-control" name="username" [(ngModel)]="form.username" required
+                        #username="ngModel" [ngClass]="{ 'is-invalid': f.submitted && username.errors }" />
+                    <div *ngIf="username.errors && f.submitted" class="invalid-feedback">
+                        El usuario es obligatorio
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" class="form-control" name="password" [(ngModel)]="form.password" required
+                        minlength="6" #password="ngModel"
+                        [ngClass]="{ 'is-invalid': f.submitted && password.errors }" />
+                    <div *ngIf="password.errors && f.submitted" class="invalid-feedback">
+                        <div *ngIf="password.errors['required']">La contraseña es obligatoria</div>
+                        <div *ngIf="password.errors['minlength']">
+                            La contraseña debe tener al menos 6 caracteres
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary btn-block">
+                        Ingresar
+                    </button>
+                </div>
+                <div class="form-group social-netwoks">
+                    <button type="button" class="btn btn-sm btn-google" (click)="loginWithGoogle()">
+                        <i class="bi bi-google"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-facebook" (click)="loginWithFacebook()">
+                        <i class="bi bi-facebook"></i>
+                    </button>
+                </div>
+                <div class="form-group">>
+                   <a [routerLink]="[ '/register' ]" routerLinkActive="active">Registrarse</a>
+                </div>
+                <div class="form-group">
+                    <div *ngIf="f.submitted && isLoginFailed" class="alert alert-danger" role="alert">
+                        Error: {{ errorMessage }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+ 
+
+ 
+http://localhost:4200/register
+ 
+
+<div class="login-container">
+    <div class="card card-container">
+        <div class="col-md-12">
+            <h3 class="text-center">Ingresa los datos solicitados para registrarse</h3>
+            <img id="profile-img" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" class="profile-img-card" />
+
+            <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+
+                <div class="row">
+
+                    <div class="col-md-12 mb-3">
+                        <label for="username" class="form-label">Nombre de Usuario:</label>
+                        <input id="username" formControlName="username" class="form-control"
+                            [ngClass]="{'is-invalid': userForm.get('username')?.invalid && userForm.get('username')?.touched}"
+                            formControlName="username">
+                        <div *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched"
+                            class="invalid-feedback">
+                            El nombre de usuario es requerido.
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label for="email" class="form-label">Correo Electrónico:</label>
+                        <input id="email" formControlName="email" class="form-control"
+                            [ngClass]="{'is-invalid': userForm.get('email')?.invalid && userForm.get('email')?.touched}"
+                            formControlName="email">
+                        <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+                            class="invalid-feedback">
+                            Debe ingresar un correo electrónico válido
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label for="avatar" class="form-label">Avatar:</label>
+                        <input id="avatar" formControlName="avatar" class="form-control"
+                            [ngClass]="{'is-invalid': userForm.get('avatar')?.invalid && userForm.get('avatar')?.touched}"
+                            formControlName="avatar">
+                        <div *ngIf="userForm.get('avatar')?.invalid && userForm.get('avatar')?.touched"
+                            class="invalid-feedback">
+                            El avatar de usuario es requerido.
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label for="password" class=" form-label">Contraseña:</label>
+                        <input id="password" type="password" formControlName="password" class="form-control"
+                            [ngClass]="{'is-invalid': userForm.get('password')?.invalid && userForm.get('password')?.touched}"
+                            formControlName="password">
+                        <div *ngIf=" userForm.get('password')?.invalid && userForm.get('password')?.touched"
+                            class="invalid-feedback">
+                            La contraseña es obligatoria.
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label for="confirmPassword" class=" form-label">Confirmar Contraseña:</label>
+                        <input id="confirmPassword" type="password" formControlName="confirmPassword" class="form-control"
+                            [ngClass]="{'is-invalid': userForm.get('confirmPassword')?.invalid && userForm.get('confirmPassword')?.touched}"
+                            formControlName="confirmPassword">
+                        <div *ngIf="userForm.get('confirmPassword')?.invalid &&
+                            userForm.get('confirmPassword')?.touched" class="invalid-feedback">
+                            Debe ingresar nuevamente la contraseña
+                        </div>
+                    </div>
+
+                    <div *ngIf="userForm.errors?.['mismatch']" class="invalid-feedback" style="display: block;">
+                        Las contraseñas no coinciden
+                    </div>
+
+                    <div class="form-group">>
+                      <a [routerLink]="[ '/login' ]" routerLinkActive="active">Volver a Login</a>
+                   </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn d-block w-25 btn-success"
+                            [disabled]="userForm.invalid">Guardar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+Para Iniciar el login cree la Base Datos MYSQL 
+ ![image](https://github.com/user-attachments/assets/47f32e03-f6b6-45df-8de2-8e32172973c1)
+
+ 
+![image](https://github.com/user-attachments/assets/197c36fa-8873-4cd5-be43-c2fe8f5f939c)
+
+
+
+Crear Listado de Producto Inventario
+ 
+ ![image](https://github.com/user-attachments/assets/f609f867-0b6f-421d-b023-e2598e961d83)
+
+
+
+
+
